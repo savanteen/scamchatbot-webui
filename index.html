@@ -2,13 +2,89 @@
 <html>
   <head>
     <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <style>
+      #timer {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      #progress {
+        margin-bottom: 10px;
+        font-family: monospace;
+      }
+      #successMessage {
+        display: none;
+        font-size: 1.5em;
+        color: green;
+        font-weight: bold;
+        margin-top: 15px;
+      }
+    </style>
   </head>
   <body>
+    <div id="timer">01:00</div>
+    <div id="progress">
+      Investment Ask: ❌<br>
+      Guarantee Offered: ❌<br>
+    </div>
+
     <df-messenger
       intent="WELCOME"
       chat-title="Scam Chatbot"
       agent-id="0c11e14c-efac-4d66-9335-ee97a7bbc073"
       language-code="en"
     ></df-messenger>
+
+    <div id="successMessage">🎉 You succeeded in scamming the victim!</div>
+
+    <script>
+      // Countdown timer setup (1 minute)
+      let timeLeft = 60;
+      const timerEl = document.getElementById('timer');
+      const interval = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const seconds = (timeLeft % 60).toString().padStart(2, '0');
+        timerEl.textContent = `${minutes}:${seconds}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      // Track task completion status (simulate example updates)
+      const tasks = {
+        investmentAsk: false,
+        guaranteeOffered: false,
+      };
+
+      const progressEl = document.getElementById('progress');
+      const successMessageEl = document.getElementById('successMessage');
+
+      function updateProgressUI() {
+        progressEl.innerHTML = `
+          Investment Ask: ${tasks.investmentAsk ? '✅' : '❌'}<br>
+          Guarantee Offered: ${tasks.guaranteeOffered ? '✅' : '❌'}<br>
+        `;
+
+        if (tasks.investmentAsk && tasks.guaranteeOffered) {
+          successMessageEl.style.display = 'block';
+        }
+      }
+
+      // Example simulation: update tasks over time
+      // You will replace this with real updates from webhook or chatbot messages
+      setTimeout(() => {
+        tasks.investmentAsk = true;
+        updateProgressUI();
+      }, 10000); // after 10 seconds
+
+      setTimeout(() => {
+        tasks.guaranteeOffered = true;
+        updateProgressUI();
+      }, 20000); // after 20 seconds
+
+      updateProgressUI();
+    </script>
   </body>
 </html>
